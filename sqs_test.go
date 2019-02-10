@@ -27,6 +27,8 @@ func TestReadSqs(t *testing.T) {
 		t.Fatalf("%s", err.Error())
 	}
 
+	DeleteMessage(queue, message.ReceiptHandle)
+
 	messageObject := &HookMessage{}
 	err = json.Unmarshal(bytes.NewBufferString(*message.Body).Bytes(), messageObject)
 	if err != nil {
@@ -36,6 +38,10 @@ func TestReadSqs(t *testing.T) {
 
 	if _, ok := messageObject.MessageAttributes["X-Github-Event"]; ok == false {
 		t.Fatalf("Attribute not set")
+	}
+
+	if messageObject.MessageAttributes["X-Github-Event"].Value == "" {
+		t.Fatalf("Event value is not set")
 	}
 }
 
@@ -55,8 +61,14 @@ func TestReadHookFromSqs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%s", err.Error())
 	}
+
+	DeleteMessage(messageObject.QueueUrl, messageObject.ReceiptHandle)
+
 	if _, ok := messageObject.MessageAttributes["X-Github-Event"]; ok == false {
 		t.Fatalf("Attribute not set")
+	}
+	if messageObject.MessageAttributes["X-Github-Event"].Value == "" {
+		t.Fatalf("Event value is not set")
 	}
 }
 

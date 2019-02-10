@@ -12,6 +12,8 @@ type HookMessage struct {
 	Subject           string                    `json:"Subject"`
 	Message           string                    `json:"Message"`
 	MessageAttributes map[string]HookAttributes `json:"MessageAttributes"`
+	QueueUrl          string
+	ReceiptHandle     *string
 }
 
 type HookAttributes struct {
@@ -24,7 +26,11 @@ func ReadHookFromSqs(queue string) (*HookMessage, error) {
 	if err != nil {
 		return nil, err
 	}
-	messageObject := &HookMessage{}
+
+	messageObject := &HookMessage{
+		QueueUrl:      queue,
+		ReceiptHandle: message.ReceiptHandle,
+	}
 	err = json.Unmarshal(bytes.NewBufferString(*message.Body).Bytes(), messageObject)
 	if err != nil {
 		return nil, err
@@ -58,11 +64,14 @@ func ReadSqs(queue string) (*sqs.Message, error) {
 		return nil, nil
 	}
 
-	message := result.Messages[0]
+	return result.Messages[0], nil
+}
+
+func DeleteMessage(queue string, receipt *string) {
+	session := GetSession()
+	sqsQueue := sqs.New(session)
 	sqsQueue.DeleteMessage(&sqs.DeleteMessageInput{
 		QueueUrl:      &queue,
-		ReceiptHandle: message.ReceiptHandle,
+		ReceiptHandle: receipt,
 	})
-
-	return result.Messages[0], nil
 }

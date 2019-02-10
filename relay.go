@@ -9,7 +9,15 @@ import (
 )
 
 func RelayRequestHook(hook *HookMessage) error {
-	return RelayRequest(bytes.NewBufferString(hook.Message), "application/json", hook.MessageAttributes["X-Hub-Signature"].Value, hook.MessageAttributes["X-GitHub-Event"].Value)
+	event := hook.MessageAttributes["X-Github-Event"].Value
+	if event == "" {
+		return errors.New("event not set")
+	}
+	signature := hook.MessageAttributes["X-Hub-Signature"].Value
+	if signature == "" {
+		return errors.New("signature not set")
+	}
+	return RelayRequest(bytes.NewBufferString(hook.Message), "application/json", signature, event)
 }
 
 func RelayRequest(payload *bytes.Buffer, contentType string, signature string, event string) error {
