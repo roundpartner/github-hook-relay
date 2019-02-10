@@ -1,2 +1,1 @@
-# github-hook-relay
-GitHook SQS Relay
+# GitHook SQS Relay
