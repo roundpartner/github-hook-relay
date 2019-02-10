@@ -19,7 +19,7 @@ func TestRelayRequest(t *testing.T) {
 		Post("/github-webhook").
 		Reply(http.StatusOK)
 
-	os.Setenv("JENKINS_ENDPOINT", "http://localhost:8080/github-webhook")
+	os.Setenv("JENKINS_ENDPOINT", "http://localhost:8080/github-webhook/")
 	buffer := bytes.NewBuffer(content)
 
 	err = RelayRequest(buffer, "application/json", "sha1=0000000000000000000000000000000000000000", "push")
