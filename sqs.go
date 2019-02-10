@@ -1,10 +1,36 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"log"
 )
+
+type HookMessage struct {
+	Subject           string                    `json:"Subject"`
+	Message           string                    `json:"Message"`
+	MessageAttributes map[string]HookAttributes `json:"MessageAttributes"`
+}
+
+type HookAttributes struct {
+	Type  string `json:"Type"`
+	Value string `json:"Value"`
+}
+
+func ReadHookFromSqs(queue string) (*HookMessage, error) {
+	message, err := ReadSqs(queue)
+	if err != nil {
+		return nil, err
+	}
+	messageObject := &HookMessage{}
+	err = json.Unmarshal(bytes.NewBufferString(*message.Body).Bytes(), messageObject)
+	if err != nil {
+		return nil, err
+	}
+	return messageObject, nil
+}
 
 func ReadSqs(queue string) (*sqs.Message, error) {
 	session := GetSession()
@@ -31,6 +57,12 @@ func ReadSqs(queue string) (*sqs.Message, error) {
 	if len(result.Messages) == 0 {
 		return nil, nil
 	}
+
+	message := result.Messages[0]
+	sqsQueue.DeleteMessage(&sqs.DeleteMessageInput{
+		QueueUrl:      &queue,
+		ReceiptHandle: message.ReceiptHandle,
+	})
 
 	return result.Messages[0], nil
 }
