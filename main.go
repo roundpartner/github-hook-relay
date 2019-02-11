@@ -3,12 +3,16 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
 	log.SetOutput(os.Stdout)
 	queue := os.Getenv("AWS_SQS_QUEUE")
-	RelayHook(queue)
+	for {
+		RelayHook(queue)
+		time.Sleep(time.Second)
+	}
 }
 
 func RelayHook(queue string) error {
