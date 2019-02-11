@@ -20,12 +20,12 @@ func RelayHook(queue string) error {
 	if err != nil {
 		return err
 	}
+	if message == nil {
+		return nil
+	}
 	err = RelayRequestHook(message)
 	if err != nil {
 		return err
-	}
-	if message == nil {
-		return nil
 	}
 	DeleteMessage(message.QueueUrl, message.ReceiptHandle)
 	return nil
