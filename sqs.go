@@ -26,6 +26,9 @@ func ReadHookFromSqs(queue string) (*HookMessage, error) {
 	if err != nil {
 		return nil, err
 	}
+	if message == nil {
+		return nil, nil
+	}
 
 	messageObject := &HookMessage{
 		QueueUrl:      queue,
