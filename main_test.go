@@ -31,7 +31,7 @@ func TestRelayHooks(t *testing.T) {
 
 	os.Setenv("JENKINS_ENDPOINT", "http://localhost:8080/github-webhook")
 
-	err = RelayHook(queue)
+	_, err = RelayHook(queue)
 	if err != nil {
 		t.Fatalf("%s", err.Error())
 	}
