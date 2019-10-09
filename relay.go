@@ -40,6 +40,7 @@ func RelayRequest(payload *bytes.Buffer, contentType string, signature string, e
 		log.Printf("[ERROR] %s", err.Error())
 		return err
 	}
+	defer httpResponse.Body.Close()
 	log.Printf("[INFO] Http Status: %d", httpResponse.StatusCode)
 	if httpResponse.StatusCode != 200 {
 		buf := new(bytes.Buffer)
