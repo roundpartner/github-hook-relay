@@ -13,13 +13,13 @@ func main() {
 	for {
 		result, err := RelayHook(queue)
 		if err != nil {
-			log.Printf("[Error] %s", err)
-			multiply = multiply * 2
+			log.Printf("[ERROR] %s", err)
 		}
 		if result {
 			multiply = time.Duration(1)
 		} else if multiply < 32 {
 			multiply = multiply * 2
+			log.Printf("[INFO] Sleeping for %d seconds", multiply)
 		}
 		time.Sleep(time.Second * multiply)
 	}

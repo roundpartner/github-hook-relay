@@ -4,7 +4,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"log"
 	"os"
 )
 
@@ -14,14 +13,35 @@ func GetSession() *session.Session {
 	sessionToken := os.Getenv("AWS_SESSION_TOKEN")
 	region := os.Getenv("AWS_REGION")
 
-	session, err := session.NewSession(
-		&aws.Config{
-			Region:      aws.String(region),
-			Credentials: credentials.NewStaticCredentials(accessKey, secret, sessionToken),
-		})
+	if accessKey == "" {
+
+	}
+
+	config := ConfigWithAccessKey(region, accessKey, secret, sessionToken)
+	session, err := session.NewSession(config)
+
 	if err != nil {
-		log.Printf("AWS Error: %s\n", err.Error())
 		return nil
 	}
 	return session
+}
+
+func GetConfig(region, accessKey, secret, sessionToken string) *aws.Config {
+	if accessKey == "" {
+		return ConfigWithIAM(region)
+	}
+	return ConfigWithAccessKey(region, accessKey, secret, sessionToken)
+}
+
+func ConfigWithAccessKey(region, accessKey, secret, sessionToken string) *aws.Config {
+	return &aws.Config{
+		Region:      aws.String(region),
+		Credentials: credentials.NewStaticCredentials(accessKey, secret, sessionToken),
+	}
+}
+
+func ConfigWithIAM(region string) *aws.Config {
+	return &aws.Config{
+		Region: aws.String(region),
+	}
 }

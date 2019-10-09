@@ -11,5 +11,6 @@ docker build -t github-hook-relay .
 docker run \
     --name github-hook-relay \
     --rm \
+    --env AWS_REGION=eu-west-2 \
     github-hook-relay
 ```
