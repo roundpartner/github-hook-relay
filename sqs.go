@@ -59,7 +59,7 @@ func ReadSqs(queue string) (*sqs.Message, error) {
 	})
 
 	if err != nil {
-		log.Printf("[ERROR] SQS Error: %s\n", err.Error())
+		log.Printf("[ERROR] SQS Error: %s", err.Error())
 		return nil, err
 	}
 
