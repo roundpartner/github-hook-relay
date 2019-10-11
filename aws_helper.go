@@ -4,7 +4,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"log"
 	"os"
 )
 
@@ -25,10 +24,8 @@ func GetSession() *session.Session {
 
 func GetConfig(region, accessKey, secret, sessionToken string) *aws.Config {
 	if accessKey == "" {
-		log.Printf("No access key provided so using IAM config")
 		return ConfigWithIAM(region)
 	}
-	log.Printf("Using access key")
 	return ConfigWithAccessKey(region, accessKey, secret, sessionToken)
 }
 
