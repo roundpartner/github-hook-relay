@@ -1,12 +1,13 @@
 # GitHook SQS Relay
 Relays SQS into webhooks
 
-# Building
+## Building
 ```bash
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w'
 docker build -t github-hook-relay .
 ```
 
+## Running
 ```bash
 docker run \
     --name github-hook-relay \
