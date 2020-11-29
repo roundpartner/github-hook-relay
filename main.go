@@ -8,9 +8,10 @@ import (
 
 func main() {
 	log.SetOutput(os.Stdout)
+	log.Printf("[INFO] Starting service")
 	queue, exists := os.LookupEnv("AWS_SQS_QUEUE")
 	if !exists {
-		log.Printf("AWS_SQS_QUEUE must be set")
+		log.Printf("[ERROR] AWS_SQS_QUEUE must be set")
 		os.Exit(0)
 	}
 	multiply := time.Duration(1)
