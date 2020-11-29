@@ -16,4 +16,4 @@ ENV PATH=/
 WORKDIR /
 COPY github-hook-relay github-hook-relay
 
-CMD github-hook-relay
+ENTRYPOINT ["github-hook-relay"]
