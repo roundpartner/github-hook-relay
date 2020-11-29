@@ -22,7 +22,7 @@ func main() {
 		}
 		if result {
 			multiply = time.Duration(1)
-		} else if multiply < 32 {
+		} else if multiply < 3600 {
 			multiply = multiply * 2
 			log.Printf("[INFO] Sleeping for %d seconds", multiply)
 		}
