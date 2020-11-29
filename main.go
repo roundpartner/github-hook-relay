@@ -8,7 +8,11 @@ import (
 
 func main() {
 	log.SetOutput(os.Stdout)
-	queue := os.Getenv("AWS_SQS_QUEUE")
+	queue, exists := os.LookupEnv("AWS_SQS_QUEUE")
+	if !exists {
+		log.Printf("AWS_SQS_QUEUE must be set")
+		os.Exit(0)
+	}
 	multiply := time.Duration(1)
 	for {
 		result, err := RelayHook(queue)
