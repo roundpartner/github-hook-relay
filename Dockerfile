@@ -1,3 +1,6 @@
+FROM golang:alpine as build
+RUN apk --no-cache add ca-certificates
+
 FROM scratch
 
 ARG commit_id=master
@@ -14,6 +17,7 @@ ENV VERSION=${build_number}
 ENV PATH=/
 
 WORKDIR /
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY github-hook-relay github-hook-relay
 
 ENTRYPOINT ["github-hook-relay"]
