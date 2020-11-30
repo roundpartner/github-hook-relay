@@ -14,6 +14,13 @@ func main() {
 		log.Printf("[ERROR] AWS_SQS_QUEUE must be set")
 		os.Exit(0)
 	}
+
+	if option, set := os.LookupEnv("SERVER"); set {
+		if option == "enabled" {
+			go ListenAndServe()
+		}
+	}
+
 	multiply := time.Duration(1)
 	for {
 		result, err := RelayHook(queue)
