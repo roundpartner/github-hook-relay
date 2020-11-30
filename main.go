@@ -25,8 +25,10 @@ func main() {
 	for {
 		result, err := RelayHook(queue)
 		if err != nil {
+			serviceAvailable = false
 			log.Printf("[ERROR] %s", err)
 		}
+		serviceAvailable = true
 		if result {
 			multiply = time.Duration(1)
 		} else if multiply < 3600 {
