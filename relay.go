@@ -42,6 +42,7 @@ func RelayRequest(payload *bytes.Buffer, contentType string, signature string, e
 	}
 	defer httpResponse.Body.Close()
 	log.Printf("[INFO] Http Status: %d", httpResponse.StatusCode)
+	log.Printf("[INFO] Http Status: %d from %s for %s", httpResponse.StatusCode, endpoint, event)
 	if httpResponse.StatusCode != 200 {
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(httpResponse.Body)
