@@ -31,7 +31,7 @@ func main() {
 		serviceAvailable = true
 		if result {
 			multiply = time.Duration(1)
-		} else if multiply < 3600 {
+		} else if multiply < 1024 {
 			multiply = multiply * 2
 			log.Printf("[INFO] Sleeping for %d seconds", multiply)
 		}
